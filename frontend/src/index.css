@@ -4,9 +4,7 @@ body {
   background: #f4f3ef;
 }
 
-
-.login-page {
+.wrapper {
   margin: 0 auto;
-  padding: 10px;
-  width: 30%;
+  width: calc(100% - 70%);
 }
