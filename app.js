@@ -24,7 +24,7 @@ app.use("/graphql", graphqlHttp({
 
 mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds211709.mlab.com:11709/events`)
   .then( () => {
-    app.listen(3000);
+    app.listen(3001);
   }).catch(err => {
   console.log(err);
 })
