@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
@@ -13,22 +14,27 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MainNavigation() {
+export default function MainNavigation(props, context) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  let history = useHistory();
+  const [value, setValue] = React.useState('recents');
+
+  const handleChange = (event, newValue) => {
+    console.log(event)
+    setValue(newValue);
+    history.push(`/${newValue}`)
+  }
 
   return (
     <BottomNavigation
       value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
+      onChange={handleChange}
       showLabels
       className={classes.root}
     >
-      <BottomNavigationAction label="Events" icon={<EventIcon />} />
-      <BottomNavigationAction label="Bookings" icon={<BookmarksIcon />} />
-      <BottomNavigationAction label="Auth" icon={<LockOpenIcon />} />
+      <BottomNavigationAction value="events" label="Events" icon={<EventIcon />} />
+      <BottomNavigationAction value="bookings" label="Bookings" icon={<BookmarksIcon />} />
+      <BottomNavigationAction value="auth" label="Auth" icon={<LockOpenIcon />} />
     </BottomNavigation>
   );
 }
