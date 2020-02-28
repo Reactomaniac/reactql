@@ -1,6 +1,7 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, Component, useContext } from 'react';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
+import PropTypes from 'prop-types';
 import { CardHeader } from '@material-ui/core';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,14 +13,16 @@ import TextField from '@material-ui/core/TextField';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-const useStyles = makeStyles(theme => ({
+import AuthContext from "../context/auth-context";
+
+const styles = {
   root: {
     width: 500,
     margin: "0 auto",
     marginTop: 10
   },
   margin: {
-    margin: theme.spacing(1),
+    margin: 5,
   },
   widthInput: {
     width: 400
@@ -29,22 +32,86 @@ const useStyles = makeStyles(theme => ({
   },
   actions: {
     width: 400,
-    margin: "0 auto"
+    margin: "0 auto",
+    marginBottom: 20
   }
-}));
+};
 
-export default function AuthPage() {
-  const classes = useStyles();
+function AuthPage(props) {
+  const { classes } = props;
+
+  const context = useContext(AuthContext)
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const requestBody = (type) => {
+    let requestBody;
+    if (type === "signin") {
+      return requestBody = {
+        query: `
+          query {
+            login(email: "${email}", password: "${password}") {
+              userId
+              token
+              tokenExpiration
+            }
+          }
+        `
+      }
+    } else {
+      return requestBody = {
+        query: `
+          mutation {
+            createUser(userInput: {email: "${email}", password: "${password}"}) {
+              _id
+              email
+            }
+          }
+        `
+      }
+    }
+  }
+
+  const handleButton = (type) => {
+    // console.log(e)
+    console.log(context)
+    console.log(email)
+    console.log(password)
+    if (email.trim().length === 0 || password.trim().length === 0) {
+      return
+    }
+
+    let requestBodyBody = requestBody(type);
+
+    fetch(`http://localhost:3001/graphql`, {
+      method: "POST",
+      body: JSON.stringify(requestBodyBody),
+      headers: {
+      "Content-Type": "application/json"
+      }
+    }).then(res => {
+      if (res.status !==  200 && res.status !== 201) {
+        throw new Error("Failed")
+      }
+      return res.json()
+    }).then(resData => {
+      console.log(resData)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
   return (
     <Card className={classes.root}>
-      <CardHeader align="center" title="Sign In" />
       <CardContent align="center">
         <TextField
           className={classes.margin + " " + classes.widthInput}
           id="input-with-icon-textfield"
           label="Email"
           type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -58,6 +125,8 @@ export default function AuthPage() {
           id="input-with-icon-textfield"
           label="Password"
           type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -74,11 +143,17 @@ export default function AuthPage() {
         <Button
           variant="contained"
           color="primary"
+          align="left"
+          fullWidth
+          onClick={(e) => {handleButton("signin", e)}}
           className={classes.button}
         >
           Sign In
         </Button>
         <Button
+          fullWidth
+          align="right"
+          onClick={(e) => {handleButton("signup", e)}}
           className={classes.button}
           variant="contained"
         >
@@ -87,4 +162,11 @@ export default function AuthPage() {
       </CardActions>
     </Card>
   );
+
 }
+
+AuthPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(AuthPage);
