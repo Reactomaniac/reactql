@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from "@material-ui/core/styles";
-import AddEvent from "../components/AddEvent/AddEvent";
+import AddEvent from "../components/Events/AddEvent";
+import ListEvents from "../components/Events/ListEvents";
 
 import AuthContext from "../context/auth-context";
 
@@ -16,8 +17,57 @@ const styles = theme => {
 }
 
 class EventsPage extends Component {
+
+  state = {
+    events: []
+  }
+
+  fetchEvents() {
+    const requestBody = {
+      query: `
+        query {
+          events {
+            _id
+            title
+            description
+            date
+            price
+            creator {
+              _id
+              email
+            }
+          }
+        }
+      `
+    }
+
+    fetch(`http://localhost:3001/graphql`, {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+      "Content-Type": "application/json"
+      }
+    }).then(res => {
+      if (res.status !==  200 && res.status !== 201) {
+        throw new Error("Failed")
+      }
+      return res.json()
+    }).then(resData => {
+      const events = resData.data.events;
+      this.setState({ events })
+      console.log(resData)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  componentDidMount() {
+    this.fetchEvents()
+  }
+
   render() {
     const { classes } = this.props
+    const eventList = this.state.events
     return (
       <Grid align="center" className={classes.root}>
         <AuthContext.Consumer>
@@ -25,6 +75,7 @@ class EventsPage extends Component {
             context.token && <AddEvent /> 
           }
         </AuthContext.Consumer>
+        <ListEvents events={eventList}/>
       </Grid>
     )
   }
