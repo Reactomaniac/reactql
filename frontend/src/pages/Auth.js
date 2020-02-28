@@ -1,5 +1,5 @@
 import React, { useState, Component, useContext } from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
 import { CardHeader } from '@material-ui/core';
@@ -96,6 +96,11 @@ function AuthPage(props) {
       }
       return res.json()
     }).then(resData => {
+      context.login(
+        resData.data.login.token,
+        resData.data.login.userId,
+        resData.data.login.tokenExpiration
+      )
       console.log(resData)
     }).catch(err => {
       console.log(err)

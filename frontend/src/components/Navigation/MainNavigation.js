@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useContext } from 'react';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
@@ -7,6 +7,8 @@ import EventIcon from '@material-ui/icons/Event';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
+import AuthContext from "../../context/auth-context";
+
 const useStyles = makeStyles({
   root: {
     width: 500,
@@ -14,8 +16,10 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MainNavigation(props, context) {
+const MainNavigation = (props) => {
   const classes = useStyles();
+  const authContext = useContext(AuthContext)
+  console.log(authContext)
   let history = useHistory();
   const [value, setValue] = React.useState('recents');
 
@@ -33,8 +37,10 @@ export default function MainNavigation(props, context) {
       className={classes.root}
     >
       <BottomNavigationAction value="events" label="Events" icon={<EventIcon />} />
-      <BottomNavigationAction value="bookings" label="Bookings" icon={<BookmarksIcon />} />
-      <BottomNavigationAction value="auth" label="Auth" icon={<LockOpenIcon />} />
+      {authContext.token && <BottomNavigationAction value="bookings" label="Bookings" icon={<BookmarksIcon />} />}
+      {!authContext.token && <BottomNavigationAction value="auth" label="Auth" icon={<LockOpenIcon />} />}
     </BottomNavigation>
   );
 }
+
+export default MainNavigation

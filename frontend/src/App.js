@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { Component }from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,33 +8,52 @@ import EventsPage from "./pages/Events";
 import MainNavigation from "./components/Navigation/MainNavigation";
 import './App.css';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: "70%",
-    margin: "0 auto"
+import AuthContext from "./context/auth-context";
+
+class App extends Component {
+  state = {
+    token: null,
+    userId: null
   }
-}))
 
-function App() {
-  const classes = useStyles();
+  login = (token, userId, tokenExpiration) => {
+    this.setState({ token: token, userId: userId });
+  }
 
-  return (
-    <BrowserRouter>
-      <React.Fragment>
-        <Grid className={classes.root}>
-          <MainNavigation />
-          <div className="main-panel">
-            <Switch>
-              <Redirect from="/" to="/auth" exact />
-              <Route path="/auth" component={AuthPage} />
-              <Route path="/events" component={EventsPage} />
-              <Route path="/bookings" component={BookingsPage} />
-            </Switch>
-          </div>
-        </Grid>
-      </React.Fragment>
-    </BrowserRouter>
-  );
+  logout = () => {
+    this.setState({ token: null, userId: null })
+  }
+
+  render() {
+    return (
+      <BrowserRouter>
+        <React.Fragment>
+          <Grid className="gridClass">
+            <AuthContext.Provider
+              value={{
+                token: this.state.token,
+                userId: this.state.userId,
+                login: this.login,
+                logout: this.logout 
+              }}
+            >
+              <MainNavigation />
+              <div className="main-panel">
+                <Switch>
+                  {!this.state.token && <Redirect from="/" to="/auth" exact />}
+                  {this.state.token && <Redirect from="/" to="/events" exact />}
+                  {this.state.token && <Redirect from="/auth" to="/events" exact />}
+                  {!this.state.token && <Route path="/auth" component={AuthPage} />}
+                  <Route path="/events" component={EventsPage} />
+                  {this.state.token && <Route path="/bookings" component={BookingsPage} />}
+                </Switch>
+              </div>
+            </AuthContext.Provider>
+          </Grid>
+        </React.Fragment>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;
