@@ -1,13 +1,10 @@
-import React, { useState, Component, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
-import { CardHeader } from '@material-ui/core';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
@@ -82,11 +79,11 @@ function AuthPage(props) {
       return
     }
 
-    let requestBodyBody = requestBody(type);
+    let requestBodyData = requestBody(type);
 
     fetch(`http://localhost:3001/graphql`, {
       method: "POST",
-      body: JSON.stringify(requestBodyBody),
+      body: JSON.stringify(requestBodyData),
       headers: {
       "Content-Type": "application/json"
       }
