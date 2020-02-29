@@ -61,6 +61,13 @@ class EventsPage extends Component {
     })
   }
 
+  handleAddEvent = (event) => {
+    console.log(event)
+    const { events } = this.state;
+    events.push(event)
+    this.setState({ events })
+  }
+
   componentDidMount() {
     this.fetchEvents()
   }
@@ -72,7 +79,7 @@ class EventsPage extends Component {
       <Grid align="center" className={classes.root}>
         <AuthContext.Consumer>
           {(context) =>
-            context.token && <AddEvent /> 
+            context.token && <AddEvent handleAddEvent = {this.handleAddEvent} /> 
           }
         </AuthContext.Consumer>
         <ListEvents events={eventList}/>

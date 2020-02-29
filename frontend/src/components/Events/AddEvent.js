@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function FormDialog() {
+export default function AddEvent(props) {
   const context = useContext(AuthContext)
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -24,6 +24,7 @@ export default function FormDialog() {
   const [price, setPrice] = React.useState("");
   const [date, setDate] = React.useState("");
   const [description, setDescription] = React.useState("");
+  let handleAddEventProps  = props.handleAddEvent;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -72,7 +73,9 @@ export default function FormDialog() {
       }
       return res.json()
     }).then(resData => {
-      console.log(resData)
+      setOpen(false)
+      clearInputs()
+      handleAddEventProps(resData.data.createEvent)
     }).catch(err => {
       console.log(err)
     })

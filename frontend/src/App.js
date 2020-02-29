@@ -1,6 +1,7 @@
 import React , { Component }from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
+import { createBrowserHistory } from "history";
 import { makeStyles } from '@material-ui/core/styles';
 import AuthPage from "./pages/Auth";
 import BookingsPage from "./pages/Bookings";
@@ -9,6 +10,8 @@ import MainNavigation from "./components/Navigation/MainNavigation";
 import './App.css';
 
 import AuthContext from "./context/auth-context";
+
+const history = createBrowserHistory();
 
 class App extends Component {
   state = {
@@ -26,7 +29,7 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <BrowserRouter history={history}>
         <React.Fragment>
           <Grid className="gridClass">
             <AuthContext.Provider
