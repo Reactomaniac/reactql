@@ -79,7 +79,7 @@ class EventsPage extends Component {
       <Grid align="center" className={classes.root}>
         <AuthContext.Consumer>
           {(context) =>
-            context.token && <AddEvent handleAddEvent = {this.handleAddEvent} /> 
+            context.token && <AddEvent handleAddEvent={this.handleAddEvent} /> 
           }
         </AuthContext.Consumer>
         <ListEvents events={eventList}/>
