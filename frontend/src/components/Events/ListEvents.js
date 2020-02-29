@@ -11,7 +11,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Gravatar from 'react-awesome-gravatar';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-
 import AuthContext from "../../context/auth-context";
 
 const useStyles = makeStyles({
@@ -38,7 +37,7 @@ const ListEvents = (props) => {
                 { url => (<Avatar src={url} />) }
               </Gravatar>
             </ListItemAvatar>
-            <ListItemText primary={event.title} secondary={event.date} />
+            <ListItemText primary={event.title} secondary={new Date(event.date).toGMTString()} />
             {authContext.token && <ListItemSecondaryAction>
               <Button
                 variant="contained"
