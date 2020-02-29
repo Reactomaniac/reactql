@@ -1,5 +1,5 @@
 import React , { Component }from 'react';
-import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import { Router, Route, Redirect, Switch } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import { createBrowserHistory } from "history";
 import { makeStyles } from '@material-ui/core/styles';
@@ -29,7 +29,7 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter history={history}>
+      <Router history={history}>
         <React.Fragment>
           <Grid className="gridClass">
             <AuthContext.Provider
@@ -54,7 +54,7 @@ class App extends Component {
             </AuthContext.Provider>
           </Grid>
         </React.Fragment>
-      </BrowserRouter>
+      </Router>
     );
   }
 }
