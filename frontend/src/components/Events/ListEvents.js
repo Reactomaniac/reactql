@@ -17,6 +17,7 @@ import AuthContext from "../../context/auth-context";
 const useStyles = makeStyles({
   root: {
     width: 500,
+    marginTop: 10,
     margin: "0 auto"
   },
   inline: {

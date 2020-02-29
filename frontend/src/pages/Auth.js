@@ -9,6 +9,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import AuthContext from "../context/auth-context";
 
@@ -41,6 +42,7 @@ function AuthPage(props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const requestBody = (type) => {
     let requestBody;
@@ -71,10 +73,7 @@ function AuthPage(props) {
   }
 
   const handleButton = (type) => {
-    // console.log(e)
-    console.log(context)
-    console.log(email)
-    console.log(password)
+    setLoading(true)
     if (email.trim().length === 0 || password.trim().length === 0) {
       return
     }
@@ -93,12 +92,12 @@ function AuthPage(props) {
       }
       return res.json()
     }).then(resData => {
+      setLoading(false)
       context.login(
         resData.data.login.token,
         resData.data.login.userId,
         resData.data.login.tokenExpiration
       )
-      console.log(resData)
     }).catch(err => {
       console.log(err)
     })
@@ -106,6 +105,7 @@ function AuthPage(props) {
 
   return (
     <Card className={classes.root}>
+      {loading && <LinearProgress />}
       <CardContent align="center">
         <TextField
           className={classes.margin + " " + classes.widthInput}

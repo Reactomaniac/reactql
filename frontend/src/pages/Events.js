@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from "@material-ui/core/styles";
 import AddEvent from "../components/Events/AddEvent";
 import ListEvents from "../components/Events/ListEvents";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import AuthContext from "../context/auth-context";
 
@@ -19,7 +20,8 @@ const styles = theme => {
 class EventsPage extends Component {
 
   state = {
-    events: []
+    events: [],
+    loading: true
   }
 
   fetchEvents() {
@@ -55,6 +57,7 @@ class EventsPage extends Component {
     }).then(resData => {
       const events = resData.data.events;
       this.setState({ events })
+      this.setState({ loading: false })
       console.log(resData)
     }).catch(err => {
       console.log(err)
@@ -77,6 +80,7 @@ class EventsPage extends Component {
     const eventList = this.state.events
     return (
       <Grid align="center" className={classes.root}>
+        {this.state.loading && <LinearProgress />}
         <AuthContext.Consumer>
           {(context) =>
             context.token && <AddEvent handleAddEvent={this.handleAddEvent} /> 
