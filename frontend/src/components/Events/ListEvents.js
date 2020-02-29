@@ -6,12 +6,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Avatar from '@material-ui/core/Avatar';
-import ExploreIcon from '@material-ui/icons/Explore';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import Gravatar from 'react-awesome-gravatar';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import AuthContext from "../../context/auth-context";
+
+import EventDetails from "./EventDetails";
 
 const useStyles = makeStyles({
   root: {
@@ -39,16 +39,8 @@ const ListEvents = (props) => {
             </ListItemAvatar>
             <ListItemText primary={event.title} secondary={new Date(event.date).toGMTString()} />
             {authContext.token && <ListItemSecondaryAction>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                edge="end"
-                className={classes.button}
-                startIcon={<ExploreIcon />}
-              >
-                Details
-              </Button>
+              <EventDetails
+                event={event} />
             </ListItemSecondaryAction>}
             {!authContext.token && <ListItemSecondaryAction>
               <Button
@@ -56,7 +48,6 @@ const ListEvents = (props) => {
                 color="primary"
                 size="small"
                 edge="end"
-                className={classes.button}
                 startIcon={<AttachMoneyIcon />}
               >
                 {event.price}

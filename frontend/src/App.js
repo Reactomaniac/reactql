@@ -2,7 +2,6 @@ import React , { Component }from 'react';
 import { Router, Route, Redirect, Switch } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import { createBrowserHistory } from "history";
-import { makeStyles } from '@material-ui/core/styles';
 import AuthPage from "./pages/Auth";
 import BookingsPage from "./pages/Bookings";
 import EventsPage from "./pages/Events";
@@ -20,7 +19,7 @@ class App extends Component {
   }
 
   login = (token, userId, tokenExpiration) => {
-    this.setState({ token: token, userId: userId });
+    this.setState({ token: token, userId: userId })
   }
 
   logout = () => {
